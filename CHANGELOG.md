@@ -53,6 +53,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   excluded. `VerdictFingerprint` gains `input_error_units`, so voice-v2
   packages prepared before this change must be re-prepared.
 
+### Fixed
+- The airline `DB` check no longer depends on the order of a reservation's
+  `payment_history` (#514). Passing the same payment methods and amounts to
+  `book_reservation` in a different order produced a different DB hash and
+  scored 0 (airline tasks 14, 20, 23, 24 and 25). `DB.get_hash()`, which
+  `get_db_hash()` now uses, sorts the lists named in `ORDER_INSENSITIVE_LISTS`
+  (`src/tau2/environment/db.py`) before hashing. Other lists keep their order,
+  including retail `payment_history`, whose first entry retail tools read as
+  the original payment. The change can only turn a failed airline `DB` check
+  into a pass. No domain file changes, so pinned runtime-rules digests are
+  unchanged.
+
 ## [2.0.0] - 2026-10-19
 
 > **⚠️ Scoring change — scores are not comparable with 1.x.** Communication checks,

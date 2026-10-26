@@ -49,7 +49,7 @@ The reward components are evaluated by:
 
 | `RewardType` | Evaluator | What it checks |
 |--------------|-----------|----------------|
-| `DB` | `EnvironmentEvaluator` | After the simulation, does the predicted environment's DB hash match the target DB hash (target = fresh env + replay of `evaluation_criteria.actions`)? Any agent trajectory that produces an equivalent end state passes. |
+| `DB` | `EnvironmentEvaluator` | After the simulation, does the predicted environment's DB hash match the target DB hash (target = fresh env + replay of `evaluation_criteria.actions`)? Any agent trajectory that produces an equivalent end state passes. List order is part of the hash, except for the lists in `ORDER_INSENSITIVE_LISTS` (`src/tau2/environment/db.py`), which are compared as multisets: currently airline reservations' `payment_history`. |
 | `ENV_ASSERTION` | `EnvironmentEvaluator` | Do all `env_assertions` pass on the predicted environment? |
 | `COMMUNICATE` | `CommunicateEvaluator` | Was every required item communicated? Uses the semantic LLM judge by default; substring matching only with `--communicate-scorer substring`. |
 | `NL_ASSERTION` | `NLAssertionsEvaluator` | Does an LLM judge return true for every entry in `nl_assertions`? (WIP) |
